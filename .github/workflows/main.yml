@@ -12,6 +12,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  DOCKER_HUB_REPO_NAME: noetic-rosbridge
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -26,16 +29,11 @@ jobs:
         name: Check Out Repo
         uses: actions/checkout@v2
       -
-        name: Set docker hub repo name
-        id: set_env
-        run: |
-          echo "docker_hub_repo_name=noetic-rosbridge" >> $GITHUB_ENV
-      -
         name: Docker metadata extraction
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.docker_hub_repo_name }}
+          images: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_HUB_REPO_NAME }}
       - 
         name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -55,8 +53,10 @@ jobs:
           file: ./Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: | 
-            ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.docker_hub_repo_name }}:latest
-            ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.docker_hub_repo_name }}:${{ steps.meta.outputs.version }}
+            ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_HUB_REPO_NAME }}:latest
+            ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_HUB_REPO_NAME }}:${{ steps.meta.outputs.labels.org.opencontainers.image.version }}
+          labels: ${{ steps.meta.outputs.labels }}
+
       - 
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
