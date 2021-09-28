@@ -14,6 +14,7 @@ on:
 
 env:
   DOCKER_HUB_REPO_NAME: noetic-rosbridge
+  DOCKER_TAGGED_VERSION: "1.0.4"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -28,12 +29,6 @@ jobs:
       - 
         name: Check Out Repo
         uses: actions/checkout@v2
-      -
-        name: Docker metadata extraction
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_HUB_REPO_NAME }}
       - 
         name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -54,9 +49,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: | 
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_HUB_REPO_NAME }}:latest
-            ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_HUB_REPO_NAME }}:${{ steps.meta.outputs.labels.org.opencontainers.image.version }}
-          labels: ${{ steps.meta.outputs.labels }}
-
+            ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_HUB_REPO_NAME }}:${{ env.DOCKER_TAGGED_VERSION }}
       - 
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
