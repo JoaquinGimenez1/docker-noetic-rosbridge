@@ -1,7 +1,7 @@
 FROM osrf/ros:noetic-desktop-full-focal
 LABEL maintaner="Joaquin Gimenez <jg@joaquingimenez.com>"
 
-LABEL version="1.0.1"
+LABEL version="1.0.2"
 LABEL build-date="2021-09-28"
 
 WORKDIR /
