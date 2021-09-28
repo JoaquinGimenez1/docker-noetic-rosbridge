@@ -7,8 +7,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -31,6 +29,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      -
+        name: Set docker hub repo name
+        id: set_env
+        run: |
+          echo "docker_hub_repo_name=noetic-rosbridge" >> $GITHUB_ENV
       - 
         name: Set up Docker Buildx
         id: buildx
@@ -44,8 +47,8 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: | 
-            ${{ secrets.DOCKER_HUB_USERNAME }}/noetic-rosbridge:latest
-            ${{ secrets.DOCKER_HUB_USERNAME }}/noetic-rosbridge:1.0.2
+            ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.docker_hub_repo_name }}:latest
+            ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.docker_hub_repo_name }}:1.0.3
       - 
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
