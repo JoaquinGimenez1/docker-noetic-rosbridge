@@ -9,9 +9,7 @@ LABEL org.opencontainers.image.version: "1.1.1"
 
 WORKDIR /
 
-RUN apt update
-
-RUN apt install ros-noetic-rosbridge-suite -y
+RUN apt update && apt install -y ros-noetic-rosbridge-suite
 
 COPY init-rosbridge.sh .
 
