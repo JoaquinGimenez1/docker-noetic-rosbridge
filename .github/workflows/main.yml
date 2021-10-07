@@ -14,7 +14,7 @@ on:
 
 env:
   DOCKER_HUB_REPO_NAME: noetic-rosbridge
-  DOCKER_TAGGED_VERSION: "1.1.1"
+  DOCKER_TAGGED_VERSION: "1.1.2"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -48,8 +48,8 @@ jobs:
           file: ./Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: | 
-            ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_HUB_REPO_NAME }}:latest
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_HUB_REPO_NAME }}:${{ env.DOCKER_TAGGED_VERSION }}
+            ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_HUB_REPO_NAME }}:latest
       - 
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
