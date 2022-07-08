@@ -14,7 +14,7 @@ on:
 
 env:
   DOCKER_HUB_REPO_NAME: noetic-rosbridge
-  DOCKER_TAGGED_VERSION: "1.1.1"
+  DOCKER_TAGGED_VERSION: "1.1.3"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
